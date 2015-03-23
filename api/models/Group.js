@@ -8,11 +8,11 @@
 module.exports = {
 
     attributes: {
-        name: 'string',
-        members: {
-            collection: 'user',
-            via: 'groups'
-        }//,
+        name: 'string'
+        //members: {
+        //    collection: 'user',
+        //    via: 'groups'
+        //}//,
         //messages: {
         //    collection: 'message',
         //    via: 'group'

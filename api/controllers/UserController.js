@@ -125,7 +125,6 @@ module.exports = {
                         res.json(err);
                     }
 
-
                     bcrypt.hash(req.body.password, salt, function() {} , function(err, hash1) {
                         if (err) {
                             res.json(err);

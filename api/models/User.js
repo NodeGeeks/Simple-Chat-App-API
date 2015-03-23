@@ -17,7 +17,8 @@ module.exports = {
         firstName: 'string',
         lastName: 'string',
         password: 'string',
-        gender: 'boolean',
+        gender: 'string',
+        online: 'boolean',
         email: {
             type: 'email',
             unique: true
@@ -27,13 +28,8 @@ module.exports = {
         //    collection: 'message',
         //    via: ''
         //},
-        groups: {
-            collection: 'group',
-            via: 'members'
-        },
         toJSON: function() {
             var obj = this.toObject();
-            delete obj.activationToken;
             delete obj.password;
             return obj;
         }

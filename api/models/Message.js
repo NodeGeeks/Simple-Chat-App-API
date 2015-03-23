@@ -8,18 +8,14 @@
 module.exports = {
 
     attributes: {
-        content: 'string',
-        isRead: 'boolean',
-        datetime: 'datetime',
-        group: {
-            model: 'group'
+        message: 'string',
+        datetime: {
+            type: 'datetime',
+            defaultTo: function() {
+                return new Date();
+            }
         },
-        sender: {
-            model: 'user'
-        },
-        receiver: {
-            model: 'user'
-        }
+        userId: 'string'
     }
 
 };
