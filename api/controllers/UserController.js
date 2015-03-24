@@ -142,6 +142,7 @@ module.exports = {
                                     } else if (!found || found.length < 1) {
                                         User.create({ username: req.body.username, firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, password: req.body.password, gender: req.body.gender}).exec(function aftwards(err, user) {
                                             console.log('attempted to create user');
+                                            console.log(req.body);
                                             if (user) {
                                                 console.log('created user');
                                                 res.json(user);
