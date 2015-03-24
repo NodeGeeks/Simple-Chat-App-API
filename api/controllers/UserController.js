@@ -140,10 +140,13 @@ module.exports = {
                                     if (found.length >= 1) {
                                         res.json({exists: 'this email already exists', errorCode: 'EMAIL_EXISTS'});
                                     } else if (!found || found.length < 1) {
-                                        User.create({ username: req.body.username, firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, password: req.body.password, birthday: req.body.birthday, gender: req.body.gender, token: req.body.token}).exec(function aftwards(err, user) {
+                                        User.create({ username: req.body.username, firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, password: req.body.password, gender: req.body.gender}).exec(function aftwards(err, user) {
+                                            console.log('attempted to create user');
                                             if (user) {
+                                                console.log('created user');
                                                 res.json(user);
                                             } else if (err) {
+                                                console.log('failed to create user');
                                                 res.json({ error: 'Could not create user' }, 404);
                                             }
                                         });
