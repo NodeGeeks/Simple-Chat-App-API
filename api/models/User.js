@@ -23,11 +23,6 @@ module.exports = {
             type: 'email',
             unique: true
         },
-        birthday: 'date',
-        //messages: {
-        //    collection: 'message',
-        //    via: ''
-        //},
         toJSON: function() {
             var obj = this.toObject();
             delete obj.password;
