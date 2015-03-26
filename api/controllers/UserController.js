@@ -12,36 +12,8 @@ module.exports = {
 
         if (req.body.email && emailRegex.test(req.body.email)) {
             console.log(req.body.email +' is attempting to login');
-            User.findOne().where({email: req.body.email})
-                .then(function (user) {
-                    bcrypt.compare(req.body.password, user.password, function (err, match) {
-
-                        if (err) {
-                            return res.serverError({message: 'Something went wrong when comparing the two hashed passwords, please contact server administrator',  error: 'ERROR_COMPARING_HASHED_PASSWORD', errorObject: err }, 401);
-                        }
-
-                        if (match) {
-                            User.update({email: req.body.email}, { status: 'online'} )
-                                .then(function (updated) {
-                                    console.log('error 1');
-                                    return res.json(updated);
-                                })
-                                .failed(function(err) {
-                                    return res.serverError({message: 'Something went wrong when trying to find if the email exists, please contact server administrator', error: 'ERROR_FINDING_EMAIL', errorObject: err  }, 401);
-                                });
-                        } else {
-                            return res.serverError({message: 'The password you entered did not match our records.', error: 'INVALID_PASSWORD' }, 401);
-                        }
-                    });
-                })
-                .fail(function(err) {
-                    return res.serverError(err);
-                });
-        } else if (!emailRegex.test(req.body.email)) {
-            return res.serverError({ error: 'INVALID_EMAIL' }, 500);
-        } else if (req.body.username) {
-            User.findOne().where({username: req.body.username})
-                .then(function (user) {
+            User.find({email: req.body.email}).exec( function findCB(err, found) {
+                if (found.length >= 1) {
                     bcrypt.compare(req.body.password, user.password, function (err, match) {
                         if (err) {
                             return res.serverError({message: 'Something went wrong when comparing the two hashed passwords, please contact server administrator',  error: 'ERROR_COMPARING_HASHED_PASSWORD', errorObject: err }, 401);
@@ -59,10 +31,40 @@ module.exports = {
                             return res.serverError({message: 'The password you entered did not match our records.', error: 'INVALID_PASSWORD' }, 401);
                         }
                     });
-                })
-                .fail(function(err) {
+                }
+
+                if(err) {
                     return res.serverError(err);
-                });
+                }
+            });
+        } else if (!emailRegex.test(req.body.email)) {
+            return res.serverError({ error: 'INVALID_EMAIL' }, 500);
+        } else if (req.body.username) {
+            User.find({username: req.body.username}).exec( function findCB(err, found) {
+                if (found.length >= 1) {
+                    bcrypt.compare(req.body.password, user.password, function (err, match) {
+                        if (err) {
+                            return res.serverError({message: 'Something went wrong when comparing the two hashed passwords, please contact server administrator',  error: 'ERROR_COMPARING_HASHED_PASSWORD', errorObject: err }, 401);
+                        }
+
+                        if (match) {
+                            User.update({username: req.body.username}, { status: 'online'} )
+                                .then(function (updated){
+                                    return res.json(updated);
+                                })
+                                .failed(function(err) {
+                                    return res.serverError({message: 'Something went wrong when trying to find if the email exists, please contact server administrator', error: 'ERROR_FINDING_EMAIL', errorObject: err  }, 401);
+                                });
+                        } else {
+                            return res.serverError({message: 'The password you entered did not match our records.', error: 'INVALID_PASSWORD' }, 401);
+                        }
+                    });
+                }
+
+                if(err) {
+                    return res.serverError(err);
+                }
+            });
         } else if (!req.body.email || !req.body.username) {
             return res.serverError({ error: 'INVALID_USERNAME_OR_EMAIL' }, 500);
         }
