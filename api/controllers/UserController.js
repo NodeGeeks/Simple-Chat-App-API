@@ -20,7 +20,13 @@ module.exports = {
                         }
 
                         if (match) {
-                            return res.json(user);
+                            User.update({email: req.body.email}, { status: 'online'} )
+                                .then(function (updated){
+                                    return res.json(updated);
+                                })
+                                .failed(function(err) {
+                                    return res.serverError({message: 'Something went wrong when trying to find if the email exists, please contact server administrator', error: 'ERROR_FINDING_EMAIL', errorObject: err  }, 401);
+                                });
                         } else {
                             return res.serverError({message: 'The password you entered did not match our records.', error: 'INVALID_PASSWORD' }, 401);
                         }
@@ -40,7 +46,13 @@ module.exports = {
                         }
 
                         if (match) {
-                            return res.json(user);
+                            User.update({username: req.body.username}, { status: 'online'} )
+                                .then(function (updated){
+                                    return res.json(updated);
+                                })
+                                .failed(function(err) {
+                                    return res.serverError({message: 'Something went wrong when trying to find if the email exists, please contact server administrator', error: 'ERROR_FINDING_EMAIL', errorObject: err  }, 401);
+                                });
                         } else {
                             return res.serverError({message: 'The password you entered did not match our records.', error: 'INVALID_PASSWORD' }, 401);
                         }
@@ -90,7 +102,7 @@ module.exports = {
                                     if (found.length >= 1) {
                                         return res.json({message: 'The email (' + req.body.email + ') is already in use by another user, please use a different one', errorCode: 'EMAIL_EXISTS'});
                                     } else if (!found || found.length < 1) {
-                                        User.create({ username: req.body.username, firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, password: req.body.password, gender: req.body.gender}).exec(function aftwards(err, user) {
+                                        User.create({ username: req.body.username, firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, password: req.body.password, gender: req.body.gender, status: 'online'}).exec(function aftwards(err, user) {
                                             if (user) {
                                                return res.json(user);
                                             } else if (err) {
@@ -115,7 +127,7 @@ module.exports = {
     },
 
     logout: function (req, res) {
-        User.update({username: req.body.username, token:req.body.token}, { token: 'invalid'} )
+        User.update({username: req.body.username}, { status: 'offline'} )
             .then(function (updated){
                 return res.json(updated);
             })
