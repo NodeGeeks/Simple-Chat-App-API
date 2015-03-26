@@ -20,7 +20,7 @@ module.exports = {
                         }
 
                         if (match) {
-                            User.update({username: req.body.username}, { status: 'online'} )
+                            User.update({email: req.body.email}, { status: 'online'} )
                                 .then(function (updated){
                                     return res.json(updated);
                                 })
