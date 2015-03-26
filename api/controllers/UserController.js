@@ -14,23 +14,7 @@ module.exports = {
             console.log(req.body.email +' is attempting to login');
             User.find({email: req.body.email}).exec( function findCB(err, found) {
                 if (found.length >= 1) {
-                    bcrypt.compare(req.body.password, found[0].password, function (err, match) {
-                        if (err) {
-                            return res.serverError({message: 'Something went wrong when comparing the two hashed passwords, please contact server administrator',  error: 'ERROR_COMPARING_HASHED_PASSWORD', errorObject: err }, 401);
-                        }
-
-                        if (match) {
-                            User.update({email: req.body.email}, { status: 'online'} )
-                                .then(function (updated){
-                                    return res.json(updated);
-                                })
-                                .failed(function(err) {
-                                    return res.serverError({message: 'Something went wrong when trying to find if the email exists, please contact server administrator', error: 'ERROR_FINDING_EMAIL', errorObject: err  }, 401);
-                                });
-                        } else {
-                            return res.serverError({message: 'The password you entered did not match our records.', error: 'INVALID_PASSWORD' }, 401);
-                        }
-                    });
+                    return res.json(found[0]);
                 }
 
                 if(err) {
@@ -42,23 +26,7 @@ module.exports = {
         } else if (req.body.username) {
             User.find({username: req.body.username}).exec( function findCB(err, found) {
                 if (found.length >= 1) {
-                    bcrypt.compare(req.body.password, found[0].password, function (err, match) {
-                        if (err) {
-                            return res.serverError({message: 'Something went wrong when comparing the two hashed passwords, please contact server administrator',  error: 'ERROR_COMPARING_HASHED_PASSWORD', errorObject: err }, 401);
-                        }
-
-                        if (match) {
-                            User.update({username: req.body.username}, { status: 'online'} )
-                                .then(function (updated){
-                                    return res.json(updated);
-                                })
-                                .failed(function(err) {
-                                    return res.serverError({message: 'Something went wrong when trying to find if the email exists, please contact server administrator', error: 'ERROR_FINDING_EMAIL', errorObject: err  }, 401);
-                                });
-                        } else {
-                            return res.serverError({message: 'The password you entered did not match our records.', error: 'INVALID_PASSWORD' }, 401);
-                        }
-                    });
+                    return res.json(found[0]);
                 }
 
                 if(err) {
