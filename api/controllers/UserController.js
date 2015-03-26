@@ -11,6 +11,7 @@ module.exports = {
     login: function (req, res) {
 
         if (req.body.email && emailRegex.test(req.body.email)) {
+            console.log(req.body.email +' is attempting to login');
             User.findOne().where({email: req.body.email})
                 .then(function (user) {
                     bcrypt.compare(req.body.password, user.password, function (err, match) {
@@ -21,7 +22,8 @@ module.exports = {
 
                         if (match) {
                             User.update({email: req.body.email}, { status: 'online'} )
-                                .then(function (updated){
+                                .then(function (updated) {
+                                    console.log('error 1');
                                     return res.json(updated);
                                 })
                                 .failed(function(err) {
