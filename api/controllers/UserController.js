@@ -14,7 +14,7 @@ module.exports = {
             console.log(req.body.email +' is attempting to login');
             User.find({email: req.body.email}).exec( function findCB(err, found) {
                 if (found.length >= 1) {
-                    bcrypt.compare(req.body.password, user.password, function (err, match) {
+                    bcrypt.compare(req.body.password, found[0].password, function (err, match) {
                         if (err) {
                             return res.serverError({message: 'Something went wrong when comparing the two hashed passwords, please contact server administrator',  error: 'ERROR_COMPARING_HASHED_PASSWORD', errorObject: err }, 401);
                         }
@@ -42,7 +42,7 @@ module.exports = {
         } else if (req.body.username) {
             User.find({username: req.body.username}).exec( function findCB(err, found) {
                 if (found.length >= 1) {
-                    bcrypt.compare(req.body.password, user.password, function (err, match) {
+                    bcrypt.compare(req.body.password, found[0].password, function (err, match) {
                         if (err) {
                             return res.serverError({message: 'Something went wrong when comparing the two hashed passwords, please contact server administrator',  error: 'ERROR_COMPARING_HASHED_PASSWORD', errorObject: err }, 401);
                         }
