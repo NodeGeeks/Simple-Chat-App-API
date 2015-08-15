@@ -31,10 +31,10 @@ module.exports.connections = {
 
     localMongoDB: {
         adapter   : 'sails-mongo',
-        host      : 'comradedb.nodegeeksllc.com',
+        host      : 'your.host.url',
         port      : 27017,
         user      : 'dbuser',
-        password  : 'S0l4rP0w3r!',
+        password  : 'password',
         database  : 'chatapp'
     }
 
