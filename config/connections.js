@@ -27,15 +27,6 @@ module.exports.connections = {
 
     localMemoryDb: {
         adapter: 'sails-memory'
-    },
-
-    localMongoDB: {
-        adapter   : 'sails-mongo',
-        host      : 'your.host.url',
-        port      : 27017,
-        user      : 'dbuser',
-        password  : 'password',
-        database  : 'chatapp'
     }
 
 };
